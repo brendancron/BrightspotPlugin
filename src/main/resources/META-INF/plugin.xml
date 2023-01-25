@@ -1,0 +1,39 @@
+<idea-plugin>
+    <id>org.example.BrightspotPlugin</id>
+    <name>Brightspot Utils</name>
+    <vendor url="https://www.brightspot.com/">Brightspot</vendor>
+
+    <description><![CDATA[
+        A Plugin to assist with brightspot utility
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+                serviceImplementation="com.brightspot.settings.DebugEnvironmentSettingsState"/>
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.brightspot.settings.DebugEnvironmentSettingsConfigurable"
+                id="com.brightspot.settings.DebugEnvironmentSettingsConfigurable"
+                displayName="Debug Code Environments"/>
+    </extensions>
+
+    <actions>
+
+        <group
+                id="com.brightspot.debug.DebugCodeGroup"
+                class="com.brightspot.debug.DebugCodeGroup"
+                popup="true"
+                text="Run in Debug Code"
+                description="Run in debug code"
+                icon="BrightspotIcons.BrightspotOIcon">
+            <add-to-group
+                    group-id="EditorTabPopupMenu"
+                    anchor="last"/>
+        </group>
+
+    </actions>
+</idea-plugin>
