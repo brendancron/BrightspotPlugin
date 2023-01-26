@@ -19,6 +19,7 @@
                 instance="com.brightspot.settings.DebugEnvironmentSettingsConfigurable"
                 id="com.brightspot.settings.DebugEnvironmentSettingsConfigurable"
                 displayName="Debug Code Environments"/>
+        <scratchFileService implementation="com.brightspot.scratch.DebugCodeScratchFileService"/>
     </extensions>
 
     <actions>
