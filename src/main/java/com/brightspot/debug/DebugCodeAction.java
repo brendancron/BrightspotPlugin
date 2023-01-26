@@ -10,6 +10,7 @@ import com.brightspot.settings.DebugEnvironmentSettingsState;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import icons.BrightspotIcons;
 import org.apache.http.HttpEntity;
@@ -21,6 +22,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class DebugCodeAction extends AnAction {
 
@@ -33,7 +35,7 @@ public class DebugCodeAction extends AnAction {
     }
 
     @Override
-    public void update(AnActionEvent e) {
+    public void update(@NotNull AnActionEvent e) {
         super.update(e);
         e.getPresentation().setEnabledAndVisible(true);
     }
@@ -42,6 +44,7 @@ public class DebugCodeAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
 
         PsiFile psiFile = e.getRequiredData(CommonDataKeys.PSI_FILE);
+        Project project = e.getRequiredData(CommonDataKeys.PROJECT);
         String code = psiFile.getText();
 
         DebugEnvironment environment = null;
@@ -51,13 +54,13 @@ public class DebugCodeAction extends AnAction {
             }
         }
 
-        if(!code.isEmpty() && environment != null) {
-            sendRequest(environment, code);
+        if(!code.isEmpty() && environment != null && project != null) {
+            sendRequest(environment, code, project);
         }
 
     }
 
-    public static void sendRequest(DebugEnvironment environment, String code) {
+    public static void sendRequest(DebugEnvironment environment, String code, @NotNull Project project) {
 
         String url = environment.getUrl();
         String username = environment.getUsername();
@@ -85,7 +88,7 @@ public class DebugCodeAction extends AnAction {
 
                 HttpEntity entity = response.getEntity();
                 String responseString = EntityUtils.toString(entity, "UTF-8");
-                new DebugCodeDialogWrapper(responseString).show();
+                new DebugCodeToolWindowFactory(responseString).createToolWindowContent(project, null);
             }
 
         } catch (IOException ex) {

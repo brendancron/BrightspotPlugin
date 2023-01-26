@@ -19,6 +19,8 @@
                 instance="com.brightspot.settings.DebugEnvironmentSettingsConfigurable"
                 id="com.brightspot.settings.DebugEnvironmentSettingsConfigurable"
                 displayName="Debug Code Environments"/>
+        <toolWindow id="com.brightspot.debug.DebugCodeToolWindowFactory" secondary="true" icon="BrightspotIcons.BrightspotOIcon" anchor="right"
+                    factoryClass="com.brightspot.debug.DebugCodeToolWindowFactory"/>
     </extensions>
 
     <actions>

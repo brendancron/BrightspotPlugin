@@ -1,32 +1,27 @@
 package com.brightspot.debug;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
-import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentFactory;
+import org.jetbrains.annotations.NotNull;
 
-public class DebugCodeDialogWrapper extends DialogWrapper {
+public class DebugCodeToolWindowFactory implements ToolWindowFactory {
 
     private final String label;
 
-    public DebugCodeDialogWrapper(String label) {
-        super(true);
+    public DebugCodeToolWindowFactory(String label) {
         this.label = label;
-        setTitle("Debug Code Response");
-        setResizable(true);
-        init();
     }
 
-    @Nullable
     @Override
-    protected JComponent createCenterPanel() {
-        JPanel dialogPanel = new JPanel(new BorderLayout());
+    public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
 
         JTextPane jTextPane = new JTextPane();
         jTextPane.setContentType("text/html");
@@ -39,9 +34,11 @@ public class DebugCodeDialogWrapper extends DialogWrapper {
         JScrollPane jScrollPane = new JBScrollPane(jTextPane);
         jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        dialogPanel.add(jScrollPane, BorderLayout.CENTER);
 
-        return dialogPanel;
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content content = contentFactory.createContent(jScrollPane, "", false);
+        toolWindow.getContentManager().addContent(content);
+        toolWindow.setTitle("Debug Code Response");
     }
 
 }
